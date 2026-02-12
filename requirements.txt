@@ -1,0 +1,7 @@
+streamlit
+firebase-admin
+pydantic
+pandas
+plotly
+pyngrok
+extra-streamlit-components

@@ -1,0 +1,301 @@
+/* ==========================================================================
+   PHẦN 1: CẤU HÌNH PHÔNG CHỮ & GIAO DIỆN CHUNG
+   ========================================================================== */
+
+/* 1. Tải phông chữ 'Inter' từ Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* 2. Áp dụng phông chữ này cho toàn bộ trang web */
+html,
+body,
+[class*="css"] {
+    font-family: 'Inter', sans-serif;
+}
+
+
+/* ==========================================================================
+   PHẦN 2: TRANG TRÍ Ô NHẬP LIỆU (INPUTS)
+   ========================================================================== */
+
+/* 3. Tạo kiểu cho khung của ô nhập liệu (Text Input) */
+div[data-baseweb="input"] {
+    border-radius: 8px !important;
+    /* Bo tròn góc 8px */
+    border: 1px solid #e0e0e0 !important;
+    /* Viền màu xám nhạt */
+    background-color: #ffffff !important;
+    /* Nền màu trắng */
+}
+
+/* 4. Tạo kiểu cho khung của hộp chọn (Selectbox) & Các loại ô nhập liệu khác
+   QUAN TRỌNG: Ghi đè màu nền xanh của theme bằng màu trắng */
+div[data-baseweb="select"],
+div[data-baseweb="base-input"],
+div[data-baseweb="input"],
+div[data-baseweb="textarea"],
+div[class*="stSelectbox"]>div>div,
+div[class*="stMultiSelect"]>div>div,
+div[class*="stNumberInput"]>div>div,
+div[class*="stTextInput"]>div>div,
+div[class*="stTextArea"]>div>div,
+div[class*="stDateInput"]>div>div,
+div[class*="stTimeInput"]>div>div,
+div[data-baseweb="select"]>div,
+div[data-baseweb="input"]>div {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #31333F !important;
+}
+
+/* 4.2. Chỉ áp dụng viền cho các ô nhập liệu chính (Tránh viền kép) */
+div[data-baseweb="input"],
+div[data-baseweb="select"],
+div[data-baseweb="textarea"] {
+    border-radius: 8px !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+/* 4.3. Đảm bảo các wrapper bên ngoài KHÔNG có viền (trừ Date/Time input) */
+div[class*="stSelectbox"]>div>div,
+div[class*="stTextInput"]>div>div,
+div[class*="stNumberInput"]>div>div,
+div[class*="stTextArea"]>div>div {
+    border: none !important;
+}
+
+/* 4.4. Khôi phục viền cho DateInput và TimeInput (vì cấu trúc input của nó nằm ở wrapper này) */
+div[class*="stDateInput"]>div>div,
+div[class*="stTimeInput"]>div>div {
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+}
+
+/* Riêng phần lõi input trong suốt để lấy nền của cha */
+div[data-baseweb="base-input"] {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+/* 6. Hiệu ứng khi bấm chuột vào ô nhập liệu (Focus State) */
+div[data-baseweb="input"]:focus-within,
+div[data-baseweb="select"]:focus-within {
+    border-color: #FF4B4B !important;
+    /* Đổi viền sang màu đỏ Streamlit */
+    box-shadow: 0 0 0 1px #FF4B4B !important;
+    /* Thêm hiệu ứng phát sáng nhẹ */
+}
+
+
+/* ==========================================================================
+   PHẦN 3: NÚT BẤM (BUTTONS)
+   ========================================================================== */
+
+/* 1.1 Khắc phục nút +/- trên st.number_input bị xanh */
+div[data-testid="stNumberInput"] button {
+    background-color: #f0f2f6 !important;
+    border: 1px solid #e0e0e0 !important;
+    color: #31333F !important;
+}
+
+div[data-testid="stNumberInput"] button:hover {
+    background-color: #e0e2e6 !important;
+    border-color: #d0d0d0 !important;
+}
+
+/* 1.2 Khắc phục lỗi tiêu đề lịch (Calendar) bị xanh */
+div[data-baseweb="calendar"] {
+    background-color: #ffffff !important;
+}
+
+/* Chỉ sửa nền cho phần header (chứa tháng/năm), không can thiệp vào từng ô ngày */
+div[data-baseweb="calendar"]>div:first-child {
+    background-color: #ffffff !important;
+    color: #31333F !important;
+}
+
+/* 7. Trang trí nút bấm chính (Primary Button) */
+button[kind="primary"] {
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    /* Chữ đậm hơn */
+    transition: all 0.2s ease !important;
+    /* Hiệu ứng chuyển động mượt */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    /* Đổ bóng nhẹ */
+}
+
+/* 8. Hiệu ứng khi di chuột vào nút (Hover) */
+button[kind="primary"]:hover {
+    transform: translateY(-1px);
+    /* Nút nhích lên 1 chút */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Bóng đậm hơn tạo cảm giác nổi */
+}
+
+
+/* ==========================================================================
+   PHẦN 4: THẺ THÔNG TIN TÙY CHỈNH (CUSTOM CSS CLASSES)
+   Lưu ý: Các lớp này (.room-info-card...) bạn phải dùng HTML trong code Python mới hiện.
+   ========================================================================== */
+
+/* 9. Khung thẻ thông tin phòng */
+.room-info-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* 10. Tiêu đề bên trong thẻ */
+.room-info-header {
+    font-weight: 600;
+    color: #1e293b;
+    /* Màu chữ xám đậm */
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    /* Dàn trang linh hoạt */
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid #f1f5f9;
+    /* Đường gạch chân mờ */
+    padding-bottom: 6px;
+}
+
+/* 11. Phần hiển thị giá tiền */
+.room-info-price {
+    font-size: 13px;
+    color: #475569;
+    display: flex;
+    justify-content: space-between;
+    /* Đẩy giá tiền sang 2 bên */
+    align-items: center;
+}
+
+/* 12. Định dạng số tiền (thẻ b - in đậm) */
+.room-info-price b {
+    color: #0d9488;
+    /* Màu xanh ngọc (Teal) cho giá tiền */
+    font-size: 14px;
+}
+
+
+/* ==========================================================================
+   PHẦN 5: BỐ CỤC & TỐI ƯU KHÔNG GIAN (QUAN TRỌNG NHẤT VỚI BẠN)
+   ========================================================================== */
+
+/* 13. Thu nhỏ lề trên cùng của trang web (Tránh khoảng trắng to đùng ở đầu trang) */
+.block-container {
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+}
+
+/* 14. Định dạng tiêu đề lớn H1 */
+h1 {
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    font-size: 2rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* 15. Ẩn Menu góc phải và Footer của Streamlit cho chuyên nghiệp */
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+/* 16. Lớp tiện ích để tạo chữ nhỏ gọn */
+.compact-text {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+
+/* ==========================================================================
+   PHẦN 6: THU HẸP KHOẢNG CÁCH (COMPACT MODE - SIÊU NHỎ)
+   ========================================================================== */
+
+/* 17. Xóa bỏ khoảng cách giữa các khối dọc (Vertical Block) */
+div[data-testid="stVerticalBlock"]>div {
+    gap: 0rem !important;
+    /* QUAN TRỌNG: Đưa về 0 để các widget dính vào nhau */
+    padding-bottom: 0rem !important;
+}
+
+/* 18. Kéo nhãn (Label) lại gần ô nhập liệu hơn */
+div[data-baseweb="form-control"] label {
+    margin-top: -25px !important;
+    /* Kéo nhãn lên cao */
+    margin-bottom: -10px !important;
+    /* Kéo ô nhập liệu phía dưới lên sát nhãn */
+    font-size: 13px !important;
+    /* Chữ nhãn nhỏ lại */
+    line-height: 1.2 !important;
+}
+
+/* 19. Cắt bớt lề dưới của hàng loạt loại widget (Input, Select, Date...) */
+div[class*="stTextInput"],
+div[class*="stSelectbox"],
+div[class*="stNumberInput"],
+div[class*="stDateInput"],
+div[class*="stTimeInput"] {
+    margin-bottom: -15px !important;
+    /* Số âm để kéo thành phần tiếp theo lên */
+    min-height: 0px !important;
+}
+
+/* 20. Tạo khoảng cách siêu nhỏ (micro margin) giữa các phần tử */
+div[data-testid="element-container"] {
+    margin-bottom: 0.2rem !important;
+}
+
+/* 21. Giảm chiều cao của chính cái ô nhập liệu (cho nó lùn đi) */
+div.stTextInput>div>div>input {
+    min-height: 36px !important;
+    /* Chiều cao tối thiểu 36px */
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+/* 22. Thu gọn Radio button (nút chọn tròn) */
+div[class*="stRadio"]>label {
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+/* 23. Thu gọn Checkbox (ô tích) */
+label[data-baseweb="checkbox"] {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+
+/* ==========================================================================
+   PHẦN 7: XỬ LÝ KHOẢNG CÁCH VĂN BẢN (TEXT & CAPTION)
+   ========================================================================== */
+
+/* 24. Kéo st.caption lên cực sát (Dùng cho dòng chú thích nhỏ) */
+div[data-testid="stCaptionContainer"] {
+    margin-top: -15px !important;
+    /* Kéo lên trên */
+    margin-bottom: -35px !important;
+    /* Kéo nội dung bên dưới lên đè vào khoảng trống */
+    padding-bottom: 0px !important;
+}
+
+/* 25. Xóa khoảng cách dòng thừa của Caption */
+div[data-testid="stCaptionContainer"] p {
+    margin-bottom: 0px !important;
+}
+
+/* 26. Xóa khoảng cách dòng thừa của st.markdown/st.write */
+div[data-testid="stMarkdownContainer"] p {
+    margin-bottom: 0px !important;
+    line-height: 1.3 !important;
+    /* Giãn dòng trong đoạn văn hẹp lại */
+}

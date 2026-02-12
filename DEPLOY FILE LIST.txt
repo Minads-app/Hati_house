@@ -1,0 +1,30 @@
+# DANH SÁCH FILE CẦN THIẾT ĐỂ TRIỂN KHAI (MINIMAL DEPLOYMENT)
+
+Để copy dự án sang máy mới mà không bị nặng (chỉ vài MB thay vì 400MB), bạn **CHỈ CẦN COPY** các thư mục và file sau:
+
+## 1. Thư mục (Folders)
+*   `src/` (Mã nguồn chính)
+*   `pages/` (Các trang giao diện)
+*   `config/` (Chứa cấu hình mẫu, KHÔNG copy key cũ nếu không cần)
+*   `.streamlit/` (Cấu hình giao diện Streamlit)
+
+## 2. File (Files)
+*   `main.py` (File chạy chính)
+*   `requirements.txt` (Danh sách thư viện cần cài đặt)
+*   `create_resort.py` (Script cài đặt ban đầu)
+*   `SETUP_GUIDE.md` (Hướng dẫn sử dụng)
+*   `README.md` (Thông tin dự án)
+
+---
+
+## ⛔ NHỮNG THƯ MỤC KHÔNG ĐƯỢC COPY (Nguyên nhân làm nặng máy)
+
+1.  **`venv/`** (Rất nặng ~300MB): Đây là môi trường ảo chứa thư viện Python.
+    *   *Giải pháp*: Sang máy mới, ta sẽ chạy lệnh cài đặt lại (mất 2 phút) chứ không copy cái này.
+    *   Lệnh cài lại: `pip install -r requirements.txt`
+2.  **`.git/`** (Có thể nặng): Chứa lịch sử thay đổi code. Khách hàng không cần cái này.
+3.  **`__pycache__/`**: File rác do Python tạo ra khi chạy. Không cần copy.
+4.  **`.env`**: File cấu hình cũ của Bamboo Resort. Sang máy mới ta sẽ tạo lại bằng `create_resort.py`.
+
+## Tóm lại
+Bạn chỉ cần tạo một thư mục mới, copy code (khoảng < 5MB) rồi nén lại gửi đi. Sang máy đích, cài Python và chạy lệnh cài đặt thư viện là xong.

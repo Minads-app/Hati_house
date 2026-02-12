@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+venv/
+.venv/
+env/
+
+# Firebase credentials (KHÔNG ĐƯỢC COMMIT LÊN GITHUB!)
+config/firebase_key.json
+firebase_key.json
+
+# Streamlit secrets (chứa key nhạy cảm)
+.streamlit/secrets.toml
+
+# Environment
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Other
+*.log

@@ -8,6 +8,7 @@ import time
 import os
 import extra_streamlit_components as stx
 from datetime import datetime, timedelta
+from src.config import now_vn
 
 def get_manager():
     # Use key to ensure uniqueness if needed, but session state cache is better
@@ -99,7 +100,7 @@ def login_form(cookie_manager=None):
                     
                     # 2. Tạo session token & lưu cookie (7 ngày)
                     token = create_user_session(username)
-                    cookie_manager.set("auth_token", token, expires_at=datetime.now() + timedelta(days=7))
+                    cookie_manager.set("auth_token", token, expires_at=now_vn() + timedelta(days=7))
                     
                     st.success(f"Chào mừng {user.get('full_name')}!")
                     # Increase sleep to ensure cookie is set on frontend before rerun

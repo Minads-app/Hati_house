@@ -1,5 +1,13 @@
 import os
 import streamlit as st
+from datetime import datetime, timedelta, timezone
+
+# Múi giờ Việt Nam (UTC+7)
+VN_TZ = timezone(timedelta(hours=7))
+
+def now_vn():
+    """Trả về datetime hiện tại theo giờ Việt Nam (UTC+7). Dùng hàm này thay cho datetime.now()."""
+    return datetime.now(VN_TZ)
 
 class AppConfig:
     # Resort Info

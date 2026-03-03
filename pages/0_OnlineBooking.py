@@ -11,7 +11,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
-from src.config import AppConfig # Import Config
+from src.config import AppConfig, now_vn
 from src.db import (
     get_all_rooms,
     get_all_room_types,
@@ -143,7 +143,7 @@ def _generate_time_slots(selected_date: date) -> list[dtime]:
     - Nếu ngày chọn là hôm nay: chỉ cho phép từ thời điểm hiện tại trở đi (làm tròn lên 15 phút).
     - Nếu ngày > hôm nay: cho phép từ 00:00 đến 23:45.
     """
-    now = datetime.now()
+    now = now_vn()
     today = now.date()
 
     if selected_date <= today:
@@ -184,7 +184,7 @@ with col_time:
         format_func=lambda x: x.value,
     )
 
-    now = datetime.now()
+    now = now_vn()
     in_date = st.date_input("Ngày đến", value=now.date(), format="DD/MM/YYYY")
 
     if booking_mode == BookingType.DAILY:

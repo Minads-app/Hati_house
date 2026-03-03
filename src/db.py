@@ -6,7 +6,7 @@ import os
 from datetime import datetime, timedelta
 from src.models import Booking, BookingStatus, RoomStatus
 import uuid
-from src.config import AppConfig
+from src.config import AppConfig, now_vn
 
 
 # --- 1. KẾT NỐI FIRESTORE (Named App to avoid conflicts) ---
@@ -165,7 +165,7 @@ def get_all_rooms():
     docs = db.collection("rooms").stream()
     rooms = []
     
-    now = datetime.now()
+    now = now_vn()
     batch = db.batch()
     needs_commit = False
 
@@ -225,7 +225,7 @@ def hold_room(room_id: str, user_session_id: str, duration_minutes: int = 5) -> 
         status = data.get("status")
         current_lock_owner = data.get("locked_by")
         
-        now = datetime.now()
+        now = now_vn()
         
         # Case 1: Phòng đang AVAILABLE -> Lock được
         if status == RoomStatus.AVAILABLE or status == "Trống":
@@ -402,7 +402,7 @@ def process_checkout(booking_id: str, room_id: str, final_amount: float, payment
         # Update Booking
         db.collection("bookings").document(booking_id).update({
             "status": "Completed",
-            "check_out_actual": datetime.now(),
+            "check_out_actual": now_vn(),
             "total_amount": final_amount, 
             "service_fee": service_fee, # Phụ thu khác
             "order_service_total": total_service_orders, # Tiền gọi món
@@ -451,7 +451,7 @@ def check_in_reserved_room(room_id: str):
             return False, "Không tìm thấy booking của phòng"
 
         bk = bk_doc.to_dict() or {}
-        now = datetime.now()
+        now = now_vn()
 
         updates = {
             "status": RoomStatus.OCCUPIED,  # "Đang ở"
@@ -755,7 +755,7 @@ def get_completed_bookings(start_dt: datetime | None = None, end_dt: datetime | 
 def get_bookings_for_today():
     """Lấy danh sách booking có check-in hôm nay (Tối ưu query)"""
     db = get_db()
-    today = datetime.now().date()
+    today = now_vn().date()
     start_dt = datetime.combine(today, datetime.min.time())
     end_dt = datetime.combine(today, datetime.max.time())
     
@@ -838,7 +838,7 @@ def save_customer(name: str, phone: str, customer_type: str = "Khách lẻ"):
         "customer_name": name.strip() if name else "",
         "customer_phone": phone,
         "customer_type": customer_type or "Khách lẻ",
-        "updated_at": datetime.now()
+        "updated_at": now_vn()
     }, merge=True)  # merge=True: giữ lại field cũ nếu có
 
 
@@ -889,7 +889,7 @@ def create_user_session(username: str) -> str:
     # Lưu token vào document của user
     db.collection("users").document(username).update({
         "session_token": token,
-        "last_login": datetime.now()
+        "last_login": now_vn()
     })
     return token
 
@@ -981,7 +981,7 @@ def add_service_order(order_data: dict):
     
     # Auto add timestamp
     if not order_data.get("created_at"):
-        order_data["created_at"] = datetime.now()
+        order_data["created_at"] = now_vn()
     
     # 1. Lưu Order
     db.collection("service_orders").document(order_data["id"]).set(order_data)
@@ -1005,7 +1005,7 @@ def get_recent_service_orders(limit=50):
     orders = [doc.to_dict() for doc in docs]
     
     # Sort desc by created_at. Handle missing field safe.
-    # Firestore datetime is timezone-aware usually, datetime.now() is usually local naive or aware depending on env.
+    # Firestore datetime is timezone-aware usually, now_vn() is usually local naive or aware depending on env.
     # We just want relative order.
     def _sort_key(x):
         ts = x.get('created_at')
@@ -1055,7 +1055,7 @@ def save_role_permissions(role: str, permissions: list):
     db.collection("config_permissions").document(role).set({
         "role": role,
         "permissions": permissions,
-        "updated_at": datetime.now()
+        "updated_at": now_vn()
     })
     # Clear cache if exists
     if hasattr(get_all_role_permissions, 'clear'):

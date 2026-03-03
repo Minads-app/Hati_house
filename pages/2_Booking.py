@@ -1,5 +1,6 @@
 import streamlit as st
 from datetime import datetime, timedelta
+from src.config import now_vn
 from src.db import get_all_rooms, get_all_room_types, create_booking, get_db, find_customer_by_phone, save_customer, search_customers, hold_room, release_room_hold
 from src.models import Booking, BookingType, RoomStatus, BookingStatus, Permission
 from src.logic import calculate_estimated_price
@@ -39,7 +40,7 @@ from src.logic import get_applicable_price_config
 def reset_page():
     st.session_state["booking_success_data"] = None
     if "current_checkin_time" in st.session_state:
-        st.session_state["current_checkin_time"] = datetime.now()
+        st.session_state["current_checkin_time"] = now_vn()
     st.rerun()
 
 def check_customer_phone():
@@ -98,7 +99,7 @@ st.title("🛎️ Check-in / Đặt phòng")
 
 # Reset time logic
 if "current_checkin_time" not in st.session_state:
-    st.session_state["current_checkin_time"] = datetime.now()
+    st.session_state["current_checkin_time"] = now_vn()
 
 try:
     # Lấy dữ liệu
@@ -189,7 +190,7 @@ with st.container(border=True):
         
         # Helper to generate slots
         def _generate_time_slots(selected_date):
-             now = datetime.now()
+             now = now_vn()
              today = now.date()
              start_min = 0
              
@@ -223,7 +224,7 @@ with st.container(border=True):
                  slots = _generate_time_slots(in_date)
                  if not slots:
                      st.error("Hết giờ hôm nay!")
-                     in_time_val = datetime.now().time()
+                     in_time_val = now_vn().time()
                  else:
                      in_time_val = slots[0]
                      

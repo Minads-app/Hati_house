@@ -1,5 +1,6 @@
 import streamlit as st
 from datetime import datetime
+from src.config import now_vn
 import streamlit.components.v1 as components
 from html import escape
 from urllib.parse import quote_plus
@@ -231,7 +232,7 @@ if st.session_state["checkout_success_data"]:
         b2.download_button(
             f"⬇️ Tải bill ({print_fmt})",
             data=html_bill,
-            file_name=f"bill_{data.get('room_id','')}_{datetime.now().strftime('%Y%m%d_%H%M')}_{print_fmt}.html",
+            file_name=f"bill_{data.get('room_id','')}_{now_vn().strftime('%Y%m%d_%H%M')}_{print_fmt}.html",
             mime="text/html",
             use_container_width=True,
         )
@@ -331,7 +332,7 @@ with col_bill:
             
     # --- TÍNH TOÁN THỜI GIAN THỰC TẾ ---
     check_in = booking.get('check_in')
-    check_out_now = datetime.now()
+    check_out_now = now_vn()
     
     # Tính lại tiền phòng dựa trên giờ thực tế (Realtime calculation)
     # Lưu ý: Convert string booking_type sang Enum nếu cần, ở đây logic.py nhận string cũng được nếu xử lý khéo,

@@ -433,7 +433,7 @@ with st.container(border=True):
                                 status=BookingStatus.CHECKED_IN if is_checkin_now else BookingStatus.CONFIRMED,
                                 source="direct"
                             )
-                            suc, rez_id = create_booking(new_bk.to_dict())
+                            suc, rez_id = create_booking(new_bk, is_checkin_now)
                             if suc:
                                 success_count += 1
                                 created_ids.append(rez_id)

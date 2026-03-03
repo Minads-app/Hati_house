@@ -286,7 +286,7 @@ with tab_menu:
                 # Rename cols for display
                 # st.dataframe(df[["name", "category", "price", "unit"]]) 
                 
-                # Hiển thị bảng gọn
+                # Hiển thị bảng gọn — click dòng để Sửa/Xóa
                 tbl = []
                 for svg in full_menu:
                     tbl.append({
@@ -295,21 +295,28 @@ with tab_menu:
                         "Giá": f"{svg['price']:,.0f}",
                         "ĐVT": svg['unit']
                     })
-                st.dataframe(tbl, use_container_width=True, hide_index=True)
                 
-                # Thao tác: Chọn món → Sửa / Xóa
-                menu_names = [s['name'] for s in full_menu]
-                sel_name = st.selectbox("Chọn món để thao tác:", menu_names, key="sel_menu_action", label_visibility="collapsed", placeholder="-- Chọn món để Sửa / Xóa --", index=None)
-                if sel_name:
-                    sel_item = next((s for s in full_menu if s['name'] == sel_name), None)
-                    if sel_item:
-                        ba, bb = st.columns(2)
-                        if ba.button("✏️ Sửa", key="act_edit_menu"):
-                            st.session_state["edit_service"] = sel_item
-                            st.rerun()
-                        if bb.button("🗑️ Xóa", key="act_del_menu"):
-                            delete_service(sel_item['id'])
-                            st.rerun()
+                event = st.dataframe(
+                    tbl, 
+                    use_container_width=True, 
+                    hide_index=True,
+                    on_select="rerun",
+                    selection_mode="single-row"
+                )
+                
+                # Khi chọn 1 dòng → hiện nút Sửa / Xóa
+                sel_rows = event.selection.rows if event.selection else []
+                if sel_rows:
+                    idx = sel_rows[0]
+                    sel_item = full_menu[idx]
+                    st.caption(f"Đã chọn: **{sel_item['name']}**")
+                    ba, bb, _ = st.columns([1, 1, 3])
+                    if ba.button("✏️ Sửa", key="act_edit_menu"):
+                        st.session_state["edit_service"] = sel_item
+                        st.rerun()
+                    if bb.button("🗑️ Xóa", key="act_del_menu"):
+                        delete_service(sel_item['id'])
+                        st.rerun()
 
 # ---------------------------------------------------------
 # TAB 3: LỊCH SỬ (Simple View)

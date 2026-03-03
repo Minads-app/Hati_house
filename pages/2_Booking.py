@@ -439,9 +439,24 @@ with st.container(border=True):
                                 created_ids.append(rez_id)
                     
                     if success_count == len(selected_rooms):
-                         st.success(f"Đã tạo {success_count} booking thành công!")
-                         # Clear state
-                         st.session_state["selected_rooms"] = []
+                         # Clear hold state
+                         st.session_state["last_admin_held_rooms"] = []
+                         st.session_state.pop("admin_single_room", None)
+                         st.session_state.pop("admin_selected_rooms", None)
+                         
+                         # Set success data để hiện màn hình thành công
+                         st.session_state["booking_success_data"] = {
+                             "booking_id": ", ".join(created_ids),
+                             "room_id": ", ".join(selected_rooms),
+                             "customer_name": c_name,
+                             "customer_phone": c_phone,
+                             "booking_type": booking_mode.value,
+                             "check_in": check_in_time,
+                             "check_out": check_out_time,
+                             "price": total_est_price,
+                             "deposit": deposit,
+                             "status_text": "Đã nhận phòng" if is_checkin_now else "Đã xác nhận (chờ nhận phòng)"
+                         }
                          st.rerun()
                     else:
                         st.error(f"Có lỗi xảy ra! Chỉ tạo được {success_count}/{len(selected_rooms)} phòng.")

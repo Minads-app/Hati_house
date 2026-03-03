@@ -288,14 +288,15 @@ with tab_menu:
                 
                 # Custom list for actions
                 for svg in full_menu:
-                    c1, c2, c3, c4, c5 = st.columns([3, 1.5, 1.5, 0.5, 0.5], gap="small")
+                    c1, c2, c3, c4 = st.columns([3, 1.5, 1.5, 1], gap="small")
                     c1.write(f"**{svg['name']}**")
                     c2.write(f"{svg['category']}")
                     c3.write(f"{svg['price']:,.0f}/{svg['unit']}")
-                    if c4.button("✏️", key=f"e_sv_{svg['id']}"):
+                    b1, b2 = c4.columns(2)
+                    if b1.button("Sửa", key=f"e_sv_{svg['id']}"):
                         st.session_state["edit_service"] = svg
                         st.rerun()
-                    if c5.button("🗑️", key=f"d_sv_{svg['id']}"):
+                    if b2.button("Xóa", key=f"d_sv_{svg['id']}"):
                         delete_service(svg['id'])
                         st.rerun()
                     st.markdown("<hr style='margin:2px 0;border:none;border-top:1px solid #eee;'>", unsafe_allow_html=True)

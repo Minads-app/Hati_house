@@ -783,26 +783,24 @@ def get_user(username: str):
     return None
 
 def find_customer_by_phone(phone: str):
-    """Tìm thông tin khách hàng gần nhất theo số điện thoại"""
+    """Tìm thông tin khách hàng theo SĐT - Ưu tiên collection customers, fallback bookings"""
     if not phone or len(phone.strip()) < 3:
         return None
     
+    phone = phone.strip()
     db = get_db()
-    # Tìm trong collection bookings, order by check_in desc, limit 1
-    # Lưu ý: Cần composite index nếu sort và filter cùng lúc.
-    # Để tránh lỗi index, ta có thể filter trước rồi sort in-memory nếu số lượng ít,
-    # hoặc chỉ cần lấy 1 document bất kỳ (nếu chấp nhận không phải mới nhất).
-    # Tuy nhiên, ta muốn lấy tên mới nhất.
-    # Hãy thử query simple equality trước.
     
-    docs = db.collection("bookings").where(filter=FieldFilter("customer_phone", "==", phone.strip())).stream()
+    # 1. Tìm trong collection customers trước (nhanh)
+    doc = db.collection("customers").document(phone).get()
+    if doc.exists:
+        return doc.to_dict()
     
-    # Sort in-memory to find latest
+    # 2. Fallback: tìm trong bookings (chậm hơn nhưng tương thích data cũ)
+    docs = db.collection("bookings").where(filter=FieldFilter("customer_phone", "==", phone)).stream()
     found_bookings = [doc.to_dict() for doc in docs]
     if not found_bookings:
         return None
-        
-    # Sort by created_at or check_in. Booking model has check_in.
+    
     def _sort_key(b):
         ts = b.get('check_in')
         if isinstance(ts, datetime):
@@ -810,16 +808,66 @@ def find_customer_by_phone(phone: str):
         return 0.0
         
     found_bookings.sort(key=_sort_key, reverse=True)
-    
     latest = found_bookings[0]
-    return {
+    
+    result = {
         "customer_name": latest.get("customer_name"),
-        "customer_phone": latest.get("customer_phone"), # Giữ nguyên
+        "customer_phone": latest.get("customer_phone"),
         "customer_type": latest.get("customer_type", "Khách lẻ")
     }
     
+    # Tự động lưu vào customers collection luôn
+    save_customer(result["customer_name"], result["customer_phone"], result.get("customer_type", "Khách lẻ"))
+    
+    return result
 
-    return None
+
+def save_customer(name: str, phone: str, customer_type: str = "Khách lẻ"):
+    """
+    Lưu hoặc cập nhật thông tin khách hàng.
+    Dùng SĐT làm document ID (unique).
+    Gọi hàm này mỗi khi tạo booking mới.
+    """
+    if not phone or not phone.strip():
+        return
+    
+    phone = phone.strip()
+    db = get_db()
+    
+    db.collection("customers").document(phone).set({
+        "customer_name": name.strip() if name else "",
+        "customer_phone": phone,
+        "customer_type": customer_type or "Khách lẻ",
+        "updated_at": datetime.now()
+    }, merge=True)  # merge=True: giữ lại field cũ nếu có
+
+
+def search_customers(keyword: str, limit: int = 10):
+    """
+    Tìm khách hàng theo tên hoặc SĐT.
+    Firestore không hỗ trợ LIKE/contains, nên load tất cả rồi filter in-memory.
+    Phù hợp cho resort nhỏ (< vài nghìn khách).
+    """
+    if not keyword or len(keyword.strip()) < 2:
+        return []
+    
+    keyword = keyword.strip().lower()
+    db = get_db()
+    
+    docs = db.collection("customers").stream()
+    results = []
+    
+    for doc in docs:
+        data = doc.to_dict()
+        name = (data.get("customer_name") or "").lower()
+        phone = (data.get("customer_phone") or "").lower()
+        
+        if keyword in name or keyword in phone:
+            results.append(data)
+            if len(results) >= limit:
+                break
+    
+    return results
 
 def create_user(user_data: dict):
     """Tạo mới hoặc cập nhật user"""

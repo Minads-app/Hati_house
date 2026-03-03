@@ -1,6 +1,6 @@
 import streamlit as st
 from datetime import datetime, timedelta
-from src.db import get_all_rooms, get_all_room_types, create_booking, get_db, find_customer_by_phone, hold_room, release_room_hold # New
+from src.db import get_all_rooms, get_all_room_types, create_booking, get_db, find_customer_by_phone, save_customer, search_customers, hold_room, release_room_hold
 from src.models import Booking, BookingType, RoomStatus, BookingStatus, Permission
 from src.logic import calculate_estimated_price
 from src.ui import apply_sidebar_style, create_custom_sidebar_menu, require_login, require_permission, has_permission
@@ -146,6 +146,24 @@ with st.container(border=True):
     # --- CỘT 1: THÔNG TIN KHÁCH & THỜI GIAN ---
     with col_customer:
         st.caption("1. Thông tin khách")
+        
+        # --- Tìm kiếm khách cũ ---
+        search_kw = st.text_input("🔍 Tìm khách ĐẶT TRƯỚC", placeholder="Nhập tên khách hoặc SĐT", key="search_customer_kw")
+        if search_kw and len(search_kw.strip()) >= 2:
+            found_customers = search_customers(search_kw)
+            if found_customers:
+                options = [f"{c['customer_name']} - {c['customer_phone']}" for c in found_customers]
+                selected = st.selectbox("Chọn khách:", options, key="select_customer")
+                if st.button("✅ Chọn khách này", key="btn_pick_customer"):
+                    idx = options.index(selected)
+                    picked = found_customers[idx]
+                    st.session_state["c_name"] = picked["customer_name"]
+                    st.session_state["c_phone"] = picked["customer_phone"]
+                    st.rerun()
+            else:
+                st.caption("Không tìm thấy khách cũ.")
+        
+        st.markdown("---")
         c_name = st.text_input("Họ tên khách (*)", key="c_name")
         c_phone = st.text_input("Số điện thoại (*)", key="c_phone", on_change=check_customer_phone)
         
@@ -437,6 +455,10 @@ with st.container(border=True):
                             if suc:
                                 success_count += 1
                                 created_ids.append(rez_id)
+                    
+                    # Lưu thông tin khách hàng vào collection customers
+                    if success_count > 0 and c_phone:
+                        save_customer(c_name, c_phone, c_type)
                     
                     if success_count == len(selected_rooms):
                          # Clear hold state

@@ -177,11 +177,11 @@ with tab_order:
 
                 # --- Danh sách món ---
                 for item in page_items:
-                    c1, c2, c3 = st.columns([2.5, 1.0, 1.2], gap="small")
+                    c1, c2, c3 = st.columns([3, 1.0, 0.6], gap="small")
                     c1.markdown(f"<p style='margin: 0; padding: 3px 0;'><b>{item['name']}</b> ({item['unit']})</p>", unsafe_allow_html=True)
                     c2.markdown(f"<p style='margin: 0; padding: 3px 0;'>{item['price']:,.0f} đ</p>", unsafe_allow_html=True)
                     with c3:
-                        if st.button("Thêm món", key=f"add_{item['id']}", use_container_width=True):
+                        if st.button("➕", key=f"add_{item['id']}", help="Thêm món"):
                             if not s_room_id:
                                 st.toast("Vui lòng chọn phòng", icon="⚠️")
                             else:

@@ -177,26 +177,25 @@ with tab_order:
 
                 # --- Danh sách món ---
                 for item in page_items:
-                    c1, c2, c3 = st.columns([3, 1.0, 0.6], gap="small")
-                    c1.markdown(f"<p style='margin: 0; padding: 3px 0;'><b>{item['name']}</b> ({item['unit']})</p>", unsafe_allow_html=True)
-                    c2.markdown(f"<p style='margin: 0; padding: 3px 0;'>{item['price']:,.0f} đ</p>", unsafe_allow_html=True)
-                    with c3:
-                        if st.button("➕", key=f"add_{item['id']}", help="Thêm món"):
-                            if not s_room_id:
-                                st.toast("Vui lòng chọn phòng", icon="⚠️")
+                    c1, c2, c3 = st.columns([3.5, 1.2, 0.5], gap="small")
+                    c1.write(f"**{item['name']}** ({item['unit']})")
+                    c2.write(f"{item['price']:,.0f} đ")
+                    if c3.button("＋", key=f"add_{item['id']}"):
+                        if not s_room_id:
+                            st.toast("Vui lòng chọn phòng", icon="⚠️")
+                        else:
+                            cart = st.session_state["cart"]
+                            if item['id'] in cart:
+                                cart[item['id']]['qty'] += 1
                             else:
-                                cart = st.session_state["cart"]
-                                if item['id'] in cart:
-                                    cart[item['id']]['qty'] += 1
-                                else:
-                                    cart[item['id']] = {
-                                        "id": item['id'],
-                                        "name": item['name'],
-                                        "price": item['price'],
-                                        "qty": 1
-                                    }
-                                st.toast(f"Đã thêm {item['name']}", icon="🛒")
-                    st.markdown("<hr style='margin: 2px 0; border: none; border-top: 1px solid #e0e0e0;'>", unsafe_allow_html=True)
+                                cart[item['id']] = {
+                                    "id": item['id'],
+                                    "name": item['name'],
+                                    "price": item['price'],
+                                    "qty": 1
+                                }
+                            st.toast(f"Đã thêm {item['name']}", icon="🛒")
+                    st.divider()
 
                 # --- Nút phân trang ---
                 if total_pages > 1:
@@ -289,20 +288,17 @@ with tab_menu:
                 
                 # Custom list for actions
                 for svg in full_menu:
-                    c1, c2, c3, c4 = st.columns([3, 2, 2, 2])
+                    c1, c2, c3, c4, c5 = st.columns([3, 1.5, 1.5, 0.5, 0.5], gap="small")
                     c1.write(f"**{svg['name']}**")
                     c2.write(f"{svg['category']}")
                     c3.write(f"{svg['price']:,.0f}/{svg['unit']}")
-                    
-                    with c4:
-                        b_e, b_d = st.columns(2)
-                        if b_e.button("✏️", key=f"e_sv_{svg['id']}"):
-                            st.session_state["edit_service"] = svg
-                            st.rerun()
-                        if b_d.button("🗑️", key=f"d_sv_{svg['id']}"):
-                            delete_service(svg['id'])
-                            st.rerun()
-                    st.divider()
+                    if c4.button("✏️", key=f"e_sv_{svg['id']}"):
+                        st.session_state["edit_service"] = svg
+                        st.rerun()
+                    if c5.button("🗑️", key=f"d_sv_{svg['id']}"):
+                        delete_service(svg['id'])
+                        st.rerun()
+                    st.markdown("<hr style='margin:2px 0;border:none;border-top:1px solid #eee;'>", unsafe_allow_html=True)
 
 # ---------------------------------------------------------
 # TAB 3: LỊCH SỬ (Simple View)

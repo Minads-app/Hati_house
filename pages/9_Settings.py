@@ -71,7 +71,7 @@ components.html("""
     let formatting = false;
 
     function formatNum(n) {
-        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return n.toString().replace(/\\B(?=(\\d{3})+(?!\\d))/g, ',');
     }
 
     function handleInput(input) {

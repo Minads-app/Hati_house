@@ -285,7 +285,7 @@ if "online_payment_uploaded" not in st.session_state:
 btn_book = st.button(
     "✅ Gửi yêu cầu đặt phòng & xem mã QR thanh toán",
     type="primary",
-    use_container_width=True,
+    width='stretch',
 )
 
 if btn_book:
@@ -343,7 +343,7 @@ if booking_id:
                 f"addInfo={quote_plus(cfg.get('note','Thanh toan tien phong'))}&"
                 f"amount={amount_vnd}"
             )
-            st.image(qr_url, caption="VietQR ngân hàng", use_column_width=True)
+            st.image(qr_url, caption="VietQR ngân hàng", width='stretch')
             if cfg.get("bank_name") or cfg.get("account_number"):
                 st.caption(
                     f"{cfg.get('bank_name','')} - STK: {cfg.get('account_number','')} ({cfg.get('account_name','')})"
@@ -368,7 +368,7 @@ if booking_id:
             if st.button(
                 "📤 Gửi hình chụp thanh toán cho lễ tân",
                 type="primary",
-                use_container_width=True,
+                width='stretch',
             ):
                 try:
                     update_online_payment_proof(

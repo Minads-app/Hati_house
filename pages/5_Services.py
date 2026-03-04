@@ -103,7 +103,7 @@ with tab_order:
 
             note = st.text_input("Ghi chú (Không cay, ít đá...)", key="order_note")
 
-            if st.button("✅ Gửi Order / Báo Bếp", type="primary", use_container_width=True):
+            if st.button("✅ Gửi Order / Báo Bếp", type="primary", width='stretch'):
                 if not has_permission(Permission.CREATE_SERVICE_ORDER):
                     st.error("⛔ Bạn không có quyền tạo order.")
                 elif not s_room_id:
@@ -201,12 +201,12 @@ with tab_order:
                 if total_pages > 1:
                     pg_cols = st.columns([1, 3, 1])
                     with pg_cols[0]:
-                        if st.button("◀ Trước", disabled=(current_page == 0), key="svc_prev", use_container_width=True):
+                        if st.button("◀ Trước", disabled=(current_page == 0), key="svc_prev", width='stretch'):
                             st.session_state["svc_page"] -= 1
                             st.rerun()
                     pg_cols[1].markdown(f"<p style='text-align:center; padding: 8px 0;'>Trang <b>{current_page + 1}</b> / {total_pages}</p>", unsafe_allow_html=True)
                     with pg_cols[2]:
-                        if st.button("Sau ▶", disabled=(current_page >= total_pages - 1), key="svc_next", use_container_width=True):
+                        if st.button("Sau ▶", disabled=(current_page >= total_pages - 1), key="svc_next", width='stretch'):
                             st.session_state["svc_page"] += 1
                             st.rerun()
 
@@ -298,7 +298,7 @@ with tab_menu:
                 
                 event = st.dataframe(
                     tbl, 
-                    use_container_width=True, 
+                    width='stretch', 
                     hide_index=True,
                     on_select="rerun",
                     selection_mode="single-row"

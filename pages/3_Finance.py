@@ -170,7 +170,7 @@ if has_permission(Permission.EXPORT_REPORTS):
         data=csv_data,
         file_name=f"DoanhThu_{d_from.strftime('%Y%m%d')}_{d_to.strftime('%Y%m%d')}.csv",
         mime="text/csv",
-        use_container_width=True,
+        width='stretch',
         disabled=df.empty
     )
 else:
@@ -196,13 +196,13 @@ def generate_print_html(dataframe, d_s, d_e):
 
 import streamlit.components.v1 as components
 if has_permission(Permission.EXPORT_REPORTS):
-    if not df.empty and c_btn3.button("🖨️ In Báo Cáo", use_container_width=True):
+    if not df.empty and c_btn3.button("🖨️ In Báo Cáo", width='stretch'):
         html = generate_print_html(df_display, d_from, d_to)
         components.html(html, height=0, width=0)
 else:
     c_btn3.button("🖨️ In Báo Cáo", disabled=True, key="btn_print_disabled")
 
-if c_btn1.button("👁️ Xem / Làm mới", use_container_width=True):
+if c_btn1.button("👁️ Xem / Làm mới", width='stretch'):
     st.rerun()
 
 # --- TABLE DISPLAY ---
@@ -218,7 +218,7 @@ else:
             "Tiền dịch vụ": st.column_config.NumberColumn("Tiền dịch vụ", format="%d đ"),
             "Số tiền": st.column_config.NumberColumn("Số tiền", format="%d đ"),
         },
-        use_container_width=True, 
+        width='stretch', 
         hide_index=True,
         height=300
     )
@@ -253,7 +253,7 @@ if not df.empty:
                 "room_id": "Phòng",
                 "revenue": st.column_config.NumberColumn("Doanh thu", format="%d đ")
             },
-            use_container_width=True, 
+            width='stretch', 
             hide_index=True
         )
 

@@ -89,7 +89,7 @@ def login_form(cookie_manager=None):
             password = st.text_input("Mật khẩu", type="password", placeholder="******")
             st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
             
-            if st.form_submit_button("Đăng nhập", type="primary", use_container_width=True):
+            if st.form_submit_button("Đăng nhập", type="primary", width='stretch'):
                 user = authenticate_user(username, password)
                 if user:
                     st.session_state["user"] = user
@@ -457,7 +457,7 @@ def create_custom_sidebar_menu():
                     unsafe_allow_html=True,
                 )
             else:
-                if st.button(f"{icon} {label}", key=f"menu_{page_id}", use_container_width=True, type="secondary"):
+                if st.button(f"{icon} {label}", key=f"menu_{page_id}", width='stretch', type="secondary"):
                     try:
                         st.switch_page(page_path)
                     except Exception as e:

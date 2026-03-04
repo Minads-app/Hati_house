@@ -120,7 +120,7 @@ else:
         df = pd.DataFrame(rows)
         # Reorder columns
         df = df[["Phòng", "Khách", "SĐT", "Check-in", "Check-out", "Trạng thái"]]
-        st.dataframe(df, use_container_width=True, hide_index=True)
+        st.dataframe(df, width='stretch', hide_index=True)
     except Exception:
         for r in rows:
             st.write(

@@ -417,7 +417,7 @@ with st.container(border=True):
         btn_label = "✅ CHECK-IN" if is_checkin_now else "💾 LƯU"
         
         if has_permission(Permission.CREATE_BOOKING):
-            if st.button(btn_label, type="primary", use_container_width=True):
+            if st.button(btn_label, type="primary", width='stretch'):
                 if not c_name:
                     st.error("Thiếu tên khách!")
                 elif not c_phone:

@@ -211,7 +211,7 @@ def dialog_add_room_type():
         en_overnight = c2.checkbox("Qua đêm", value=True, key="add_eo")
         en_daily = c3.checkbox("Theo ngày", value=True, key="add_ed")
         
-        submitted = st.form_submit_button("➕ Thêm Mới", type="primary", use_container_width=True)
+        submitted = st.form_submit_button("➕ Thêm Mới", type="primary", width='stretch')
         
         if submitted:
             if not r_code or not r_name:
@@ -242,7 +242,7 @@ def dialog_add_room_type():
 
 with tab_types:
     # Nút thêm mới (mở dialog)
-    if st.button("➕ Thêm Loại Phòng Mới", type="primary", use_container_width=False):
+    if st.button("➕ Thêm Loại Phòng Mới", type="primary", width='content'):
         dialog_add_room_type()
     
     st.markdown("---")
@@ -349,8 +349,8 @@ with tab_types:
                         
                         st.markdown("---")
                         c_save, c_cancel = st.columns(2)
-                        btn_save = c_save.form_submit_button("💾 Lưu thay đổi", type="primary", use_container_width=True)
-                        btn_cancel = c_cancel.form_submit_button("❌ Hủy", use_container_width=True)
+                        btn_save = c_save.form_submit_button("💾 Lưu thay đổi", type="primary", width='stretch')
+                        btn_cancel = c_cancel.form_submit_button("❌ Hủy", width='stretch')
                         
                         if btn_save:
                             def _build_pc(d, o, h1, h2, h3, hn, en_h, en_o, en_d):
@@ -458,12 +458,12 @@ with tab_types:
                     st.markdown("---")
                     c_edit, c_del = st.columns([1, 1])
                     with c_edit:
-                         if st.button("✏️ Sửa", key=f"edit_{tc}", use_container_width=True):
+                         if st.button("✏️ Sửa", key=f"edit_{tc}", width='stretch'):
                              st.session_state["inline_edit_type"] = tc
                              st.rerun()
                     
                     with c_del:
-                        if st.button("🗑️ Xóa", key=f"del_{tc}", use_container_width=True):
+                        if st.button("🗑️ Xóa", key=f"del_{tc}", width='stretch'):
                             delete_room_type(tc)
                             if st.session_state.get("inline_edit_type") == tc:
                                 st.session_state["inline_edit_type"] = None
@@ -597,7 +597,7 @@ with tab_special_days:
             # MODE 3: TỰ ĐỘNG (VN)
             with tab_auto:
                 st.caption("Thêm nhanh các ngày lễ cố định của Việt Nam.")
-                if st.button("Thêm tự động (2025-2027)", use_container_width=True):
+                if st.button("Thêm tự động (2025-2027)", width='stretch'):
                     holidays_list = []
                     notes_map = {}
                     
@@ -685,7 +685,7 @@ with tab_special_days:
                 df_h[["Ngày hiển thị", "Ghi chú"]], 
                 on_select="rerun", 
                 selection_mode="multi-row", 
-                use_container_width=True,
+                width='stretch',
                 height=400
             )
 
@@ -798,7 +798,7 @@ with tab_rooms:
                             st.error("Chưa nhập số phòng!")
                 
                 if is_edit_room:
-                    if st.button("❌ Hủy bỏ thay đổi", use_container_width=True):
+                    if st.button("❌ Hủy bỏ thay đổi", width='stretch'):
                         st.session_state["edit_room"] = None
                         st.rerun()
 
@@ -934,7 +934,7 @@ with tab_system:
             )
 
             submitted = st.form_submit_button(
-                "💾 Lưu thông tin tài khoản", type="primary", use_container_width=True
+                "💾 Lưu thông tin tài khoản", type="primary", width='stretch'
             )
 
             if submitted:
@@ -968,7 +968,7 @@ with tab_system:
                 f"accountName={quote_plus(cfg.get('account_name',''))}&"
                 f"addInfo={quote_plus(cfg.get('note','Thanh toan tien phong'))}"
             )
-            st.image(qr_url, caption="VietQR được tạo tự động", use_column_width=True)
+            st.image(qr_url, caption="VietQR được tạo tự động", width='stretch')
             st.code(qr_url, language="text")
         else:
             st.info(
@@ -1099,7 +1099,7 @@ with tab_staff:
                                 st.rerun()
                 
                 if is_edit_mode:
-                    if st.button("❌ Hủy bỏ", use_container_width=True):
+                    if st.button("❌ Hủy bỏ", width='stretch'):
                         st.session_state["edit_user"] = None
                         st.rerun()
 
@@ -1153,15 +1153,15 @@ with tab_staff:
                                 # Nút sửa với text rõ ràng
                                 with b_edit:
                                     if can_modify:
-                                        if st.button("✏️ Sửa", key=f"edit_{u['username']}", use_container_width=True):
+                                        if st.button("✏️ Sửa", key=f"edit_{u['username']}", width='stretch'):
                                             st.session_state["edit_user"] = u
                                             st.rerun()
                                     else:
-                                         st.button("🔒", key=f"lk_e_{u['username']}", disabled=True, use_container_width=True, help="Chỉ Admin mới được sửa tài khoản Admin")
+                                         st.button("🔒", key=f"lk_e_{u['username']}", disabled=True, width='stretch', help="Chỉ Admin mới được sửa tài khoản Admin")
                                     
                                 with b_del:
                                     if can_modify:
-                                        if st.button("🗑️ Xóa", key=f"del_{u['username']}", use_container_width=True):
+                                        if st.button("🗑️ Xóa", key=f"del_{u['username']}", width='stretch'):
                                             if u['username'] == current_user.get("username"):
                                                 st.toast("Không thể tự xóa chính mình!", icon="⚠️")
                                             else:
@@ -1170,7 +1170,7 @@ with tab_staff:
                                                     st.session_state["edit_user"] = None
                                                 st.rerun()
                                     else:
-                                         st.button("🔒", key=f"lk_d_{u['username']}", disabled=True, use_container_width=True)
+                                         st.button("🔒", key=f"lk_d_{u['username']}", disabled=True, width='stretch')
                             st.markdown('<hr style="margin: 2px 0; border-top: 1px solid #eee;">', unsafe_allow_html=True)
                 except Exception as e:
                     st.error(f"Lỗi hiển thị danh sách: {e}")
@@ -1287,10 +1287,10 @@ with tab_permissions:
                 col_save, col_reset = st.columns([1, 1])
                 
                 with col_save:
-                    submitted = st.form_submit_button("💾 Lưu cấu hình", type="primary", use_container_width=True)
+                    submitted = st.form_submit_button("💾 Lưu cấu hình", type="primary", width='stretch')
                 
                 with col_reset:
-                    reset = st.form_submit_button("🔄 Reset về mặc định", type="secondary", use_container_width=True)
+                    reset = st.form_submit_button("🔄 Reset về mặc định", type="secondary", width='stretch')
                 
                 if submitted:
                     # Lưu cấu hình mới
@@ -1323,4 +1323,4 @@ with tab_permissions:
         
         import pandas as pd
         df_summary = pd.DataFrame(summary_data)
-        st.dataframe(df_summary, use_container_width=True, hide_index=True)
+        st.dataframe(df_summary, width='stretch', hide_index=True)

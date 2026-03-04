@@ -222,7 +222,7 @@ if st.session_state["checkout_success_data"]:
         print_fmt = st.radio("🖨️ Chọn khổ giấy in:", ["A5", "K80"], index=0, horizontal=True)
 
         b1, b2, b3 = st.columns([1, 1, 1])
-        if b1.button("🖨️ In bill ngay", type="primary", use_container_width=True):
+        if b1.button("🖨️ In bill ngay", type="primary", width='stretch'):
             st.session_state["checkout_print_now"] = True
             st.session_state["checkout_print_fmt"] = print_fmt # Lưu lại khổ giấy đã chọn
             st.rerun()
@@ -234,10 +234,10 @@ if st.session_state["checkout_success_data"]:
             data=html_bill,
             file_name=f"bill_{data.get('room_id','')}_{now_vn().strftime('%Y%m%d_%H%M')}_{print_fmt}.html",
             mime="text/html",
-            use_container_width=True,
+            width='stretch',
         )
 
-        if b3.button("⬅️ Quay lại", use_container_width=True):
+        if b3.button("⬅️ Quay lại", width='stretch'):
             reset_page()
 
         # Nếu user bấm in: render HTML + auto print
@@ -414,7 +414,7 @@ with col_bill:
         
         submitted = False
         if has_permission(Permission.CHECKIN_CHECKOUT):
-             submitted = st.form_submit_button("💰 XÁC NHẬN THANH TOÁN & TRẢ PHÒNG", type="primary", use_container_width=True)
+             submitted = st.form_submit_button("💰 XÁC NHẬN THANH TOÁN & TRẢ PHÒNG", type="primary", width='stretch')
         else:
              st.error("⛔ Bạn không có quyền thực hiện thanh toán.")
         

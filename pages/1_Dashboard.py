@@ -44,7 +44,7 @@ st.title(f"🏨 Sơ đồ phòng - {get_resort_name()}")
 #         st.sidebar.error("⚠️ Cần cài: pip install streamlit-autorefresh")
 #
 # # Force Reload Button
-# if st.sidebar.button("🔄 Tải lại ngay", use_container_width=True):
+# if st.sidebar.button("🔄 Tải lại ngay", width='stretch'):
 #     st.session_state["sp_counter"] = -1  # Force re-fetch
 #     st.rerun()
 #
@@ -121,7 +121,7 @@ with col_pending:
                         st.image(
                             base64.b64decode(img_b64),
                             caption=b.get("payment_screenshot_name", ""),
-                            use_column_width=True,
+                            width='stretch',
                         )
 
                 # Nút xác nhận đã nhận tiền
@@ -134,7 +134,7 @@ with col_pending:
                             clicked = st.button(
                                 "✅ Xác nhận đã nhận tiền",
                                 key=f"confirm_online_{booking_id}",
-                                use_container_width=True,
+                                width='stretch',
                             )
                             if clicked:
                                 ok, msg = confirm_online_booking(booking_id)
@@ -187,7 +187,7 @@ with col_history:
                         st.image(
                             base64.b64decode(img_b64),
                             caption=b.get("payment_screenshot_name", ""),
-                            use_column_width=True,
+                            width='stretch',
                         )
 
                 st.markdown("---")
@@ -324,7 +324,7 @@ if rooms:
                     """, unsafe_allow_html=True)
                     
                     # Nút thao tác nhanh
-                    with st.popover("Thao tác", use_container_width=True):
+                    with st.popover("Thao tác", width='stretch'):
                         st.write(f"**Phòng {room['id']}**")
                         st.caption(f"Trạng thái: {status}")
 
@@ -335,7 +335,7 @@ if rooms:
                             booking_info = active_bookings_map.get(booking_id)
 
                         if status == RoomStatus.AVAILABLE:
-                            if st.button("🛎️ Booking", key=f"booking_{room['id']}", use_container_width=True):
+                            if st.button("🛎️ Booking", key=f"booking_{room['id']}", width='stretch'):
                                 st.session_state["prefill_room_id"] = room["id"]
                                 try:
                                     st.switch_page("pages/2_Booking.py")
@@ -349,7 +349,7 @@ if rooms:
                                     st.write(f"Check-in: {booking_info.get('check_in').strftime('%d/%m %H:%M') if booking_info.get('check_in') else ''}")
                             
                             c_yes, c_no = st.columns(2)
-                            if c_yes.button("Trả phòng", key=f"co_yes_{room['id']}", type="primary", use_container_width=True):
+                            if c_yes.button("Trả phòng", key=f"co_yes_{room['id']}", type="primary", width='stretch'):
                                 st.session_state["prefill_checkout_room_id"] = room["id"]
                                 try:
                                     st.switch_page("pages/3_Checkout.py")
@@ -363,7 +363,7 @@ if rooms:
                                     st.write(f"**{booking_info.get('customer_name', '')}**")
                                     st.write(f"Dự kiến: {booking_info.get('check_in').strftime('%d/%m %H:%M') if booking_info.get('check_in') else ''}")
 
-                            if st.button("Check-in ngay", key=f"checkin_{room['id']}", type="primary", use_container_width=True):
+                            if st.button("Check-in ngay", key=f"checkin_{room['id']}", type="primary", width='stretch'):
                                 ok, msg = check_in_reserved_room(room["id"])
                                 if ok:
                                     st.success(f"Đã check-in {room['id']}!")
@@ -372,7 +372,7 @@ if rooms:
                                     st.error(msg)
                         
                         elif status == RoomStatus.DIRTY:
-                            if st.button("🧹 Dọn xong", key=f"clean_{room['id']}", use_container_width=True):
+                            if st.button("🧹 Dọn xong", key=f"clean_{room['id']}", width='stretch'):
                                 from src.db import update_room_status
                                 update_room_status(room['id'], RoomStatus.AVAILABLE)
                                 st.rerun()

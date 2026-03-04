@@ -805,6 +805,17 @@ with tab_rooms:
         # 2. Danh sách phòng hiện có
         with c_view:
             st.subheader("📋 Danh sách Phòng")
+            # CSS thu nhỏ nút Sửa/Xóa trong danh sách phòng
+            st.markdown("""
+            <style>
+            div[data-testid="stHorizontalBlock"] button[kind="secondary"] {
+                padding: 2px 8px !important;
+                min-height: 0 !important;
+                line-height: 1.4 !important;
+                font-size: 0.82rem !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
             rooms = get_all_rooms()
             if rooms:
                 # Header row
@@ -834,11 +845,11 @@ with tab_rooms:
                     # Actions - Compact buttons
                     with c5:
                         b_edit, b_del = st.columns([1, 1], gap="small")
-                        if b_edit.button("✏️", key=f"btn_edit_{r['id']}", help="Sửa thông tin"):
+                        if b_edit.button("Sửa", key=f"btn_edit_{r['id']}", help="Sửa thông tin"):
                             st.session_state["edit_room"] = r
                             st.rerun()
                         
-                        if b_del.button("🗑️", key=f"btn_del_{r['id']}", help="Xóa phòng này"):
+                        if b_del.button("Xóa", key=f"btn_del_{r['id']}", help="Xóa phòng này"):
                             delete_room(r['id'])
                             if st.session_state.get("edit_room", {}).get("id") == r['id']:
                                 st.session_state["edit_room"] = None

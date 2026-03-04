@@ -195,7 +195,7 @@ with tab_order:
                                     "qty": 1
                                 }
                             st.toast(f"Đã thêm {item['name']}", icon="🛒")
-                    st.divider()
+                    st.markdown("<hr style='margin: 4px 0; border: none; border-top: 1px solid #ddd;'>", unsafe_allow_html=True)
 
                 # --- Nút phân trang ---
                 if total_pages > 1:

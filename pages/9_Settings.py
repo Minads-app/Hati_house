@@ -845,11 +845,11 @@ with tab_rooms:
                     # Actions - Compact buttons
                     with c5:
                         b_edit, b_del = st.columns([1, 1], gap="small")
-                        if b_edit.button("Sửa", key=f"btn_edit_{r['id']}", help="Sửa thông tin"):
+                        if b_edit.button("Sửa", key=f"btn_edit_{r['id']}"):
                             st.session_state["edit_room"] = r
                             st.rerun()
                         
-                        if b_del.button("Xóa", key=f"btn_del_{r['id']}", help="Xóa phòng này"):
+                        if b_del.button("Xóa", key=f"btn_del_{r['id']}"):
                             delete_room(r['id'])
                             if st.session_state.get("edit_room", {}).get("id") == r['id']:
                                 st.session_state["edit_room"] = None
